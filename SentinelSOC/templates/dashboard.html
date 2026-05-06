@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>SentinelSOC Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <h1>SentinelSOC Alerts</h1>
+
+    {% for alert in alerts %}
+
+        <div class="alert {{ alert.severity.lower() }}">
+
+            <h3>{{ alert.type }}</h3>
+
+            <p><strong>Severity:</strong> {{ alert.severity }}</p>
+
+            <p><strong>IP Address:</strong> {{ alert.ip }}</p>
+
+            <p><strong>Reason:</strong> {{ alert.reason }}</p>
+
+            <p><strong>Log:</strong> {{ alert.log }}</p>
+
+        </div>
+
+    {% endfor %}
+
+</body>
+
+</html>
