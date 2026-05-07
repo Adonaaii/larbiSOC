@@ -5,7 +5,8 @@
 
     <title>SentinelSOC Dashboard</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
@@ -13,23 +14,148 @@
 
     <h1>SentinelSOC Alerts</h1>
 
+    <div class="stats-container">
+
+        <div class="stat-card">
+            <h2>{{ stats.total_alerts }}</h2>
+            <p>Total Alerts</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>{{ stats.high_alerts }}</h2>
+            <p>High Severity</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>{{ stats.unique_ips }}</h2>
+            <p>Suspicious IPs</p>
+        </div>
+
+    </div>
+
+    <div class="filters">
+
+        <button onclick="filterAlerts('ALL')">All</button>
+        <button onclick="filterAlerts('HIGH')">High</button>
+        <button onclick="filterAlerts('MEDIUM')">Medium</button>
+        <button onclick="filterAlerts('LOW')">Low</button>
+
+    </div>
+
+    <div class="chart-container">
+        <canvas id="alertsChart"></canvas>
+    </div>
+
+    <div class="leaderboard">
+
+        <h2>Suspicious IP Leaderboard</h2>
+
+        {% for ip, count in leaderboard %}
+
+            <div class="leaderboard-item">
+
+                <p><strong>{{ ip }}</strong></p>
+                <p>{{ count }} alerts</p>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
     {% for alert in alerts %}
 
-        <div class="alert {{ alert.severity.lower() }}">
+        <div class="alert {{ alert.severity.lower() }}"
+             data-severity="{{ alert.severity }}">
 
             <h3>{{ alert.type }}</h3>
 
             <p><strong>Severity:</strong> {{ alert.severity }}</p>
-
             <p><strong>IP Address:</strong> {{ alert.ip }}</p>
-
             <p><strong>Reason:</strong> {{ alert.reason }}</p>
-
             <p><strong>Log:</strong> {{ alert.log }}</p>
 
         </div>
 
     {% endfor %}
+
+    <script id="chart-data" type="application/json">
+        {{ [
+            stats.high_alerts,
+            stats.medium_alerts,
+            stats.low_alerts
+        ] | tojson }}
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        const chartData = JSON.parse(
+            document.getElementById("chart-data").textContent
+        );
+
+        const ctx = document.getElementById('alertsChart');
+
+        new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: ['High', 'Medium', 'Low'],
+
+                datasets: [{
+
+                    label: 'Alert Severity Counts',
+
+                    data: chartData,
+
+                    borderWidth: 1
+
+                }]
+            },
+
+            options: {
+
+                scales: {
+
+                    y: {
+                        beginAtZero: true
+                    }
+
+                }
+
+            }
+
+        });
+
+        function filterAlerts(severity) {
+
+            const alerts = document.querySelectorAll('.alert');
+
+            alerts.forEach(alert => {
+
+                if (
+                    severity === 'ALL' ||
+                    alert.dataset.severity === severity
+                ) {
+
+                    alert.style.display = 'block';
+
+                } else {
+
+                    alert.style.display = 'none';
+                }
+
+            });
+        }
+
+        setTimeout(function () {
+            location.reload();
+        }, 5000);
+
+    </script>
 
 </body>
 

@@ -28,3 +28,49 @@ h1 {
 .low {
     border-left: 6px solid yellow;
 }
+
+.stats-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background-color: #1e293b;
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+    text-align: center;
+    border: 1px solid #334155;
+}
+.leaderboard {
+    background-color: #1e293b;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #334155;
+    padding: 10px 0;
+}
+
+.filters {
+    margin-bottom: 20px;
+}
+
+.filters button {
+    background-color: #334155;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-right: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.filters button:hover {
+    background-color: #475569;
+}
