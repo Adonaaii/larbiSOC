@@ -6,7 +6,7 @@ from rules import (
 )
 
 from utils import parse_log
-
+from storage import save_alert
 
 def analyze_logs():
 
@@ -41,6 +41,8 @@ def analyze_logs():
             }
 
             alerts.append(alert)
+            save_alert(alert)
+            
 
             if detect_brute_force(failed_logins, ip):
 
@@ -53,6 +55,7 @@ def analyze_logs():
                 }
 
                 alerts.append(brute_force_alert)
+                save_alert(brute_force_alert)
 
         elif detect_sql_injection(line):
 
@@ -65,7 +68,7 @@ def analyze_logs():
             }
 
             alerts.append(alert)
-
+            save_alert(alert)
         elif detect_admin_probe(line):
 
             alert = {
@@ -77,6 +80,7 @@ def analyze_logs():
             }
 
             alerts.append(alert)
+            save_alert(alert)
 
     return alerts
 
