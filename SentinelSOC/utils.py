@@ -61,3 +61,42 @@ def generate_ip_leaderboard(alerts):
     )
 
     return sorted_ips
+
+def generate_ip_leaderboard(alerts):
+
+    # Dictionary to count how many alerts each IP generated
+    ip_count = {}
+
+    # Loop through every alert
+    for alert in alerts:
+
+        # Extract IP address from alert object
+        ip = alert["ip"]
+
+        # If IP has not been seen before,
+        # initialize its counter at 0
+        if ip not in ip_count:
+            ip_count[ip] = 0
+
+        # Increase alert count for this IP
+        ip_count[ip] += 1
+
+    # Sort IPs by alert count in descending order
+    # Example:
+    # ("192.168.1.99", 17)
+    # ("192.168.1.15", 4)
+    leaderboard = sorted(
+
+        # Convert dictionary into list of tuples
+        ip_count.items(),
+
+        # Sort using the second value in each tuple
+        # x[0] = IP address
+        # x[1] = alert count
+        key=lambda x: x[1],
+
+        # Highest counts first
+        reverse=True
+    )
+
+    return leaderboard

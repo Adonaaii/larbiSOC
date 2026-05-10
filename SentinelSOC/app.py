@@ -15,6 +15,7 @@ def home():
     stats = generate_statistics(alerts)
 
     leaderboard = generate_ip_leaderboard(alerts)
+    print(leaderboard)
 
     return render_template(
         "dashboard.html",
@@ -26,3 +27,4 @@ def home():
 
 if __name__ == "__main__":
     app.run(debug=True)
+    

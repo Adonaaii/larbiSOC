@@ -7,6 +7,7 @@ from rules import (
 
 from utils import parse_log
 from storage import save_alert
+from datetime import datetime
 
 def analyze_logs():
 
@@ -33,6 +34,7 @@ def analyze_logs():
             failed_logins[ip] += 1
 
             alert = {
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "severity": "MEDIUM",
                 "type": "Failed Login",
                 "ip": ip,
@@ -47,6 +49,7 @@ def analyze_logs():
             if detect_brute_force(failed_logins, ip):
 
                 brute_force_alert = {
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "severity": "HIGH",
                     "type": "Brute Force Attempt",
                     "ip": ip,
@@ -60,6 +63,7 @@ def analyze_logs():
         elif detect_sql_injection(line):
 
             alert = {
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "severity": "HIGH",
                 "type": "SQL Injection",
                 "ip": ip,
@@ -72,6 +76,7 @@ def analyze_logs():
         elif detect_admin_probe(line):
 
             alert = {
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "severity": "LOW",
                 "type": "Admin Probe",
                 "ip": ip,
@@ -81,7 +86,7 @@ def analyze_logs():
 
             alerts.append(alert)
             save_alert(alert)
-
+    alerts.reverse()
     return alerts
 
 
