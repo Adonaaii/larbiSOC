@@ -8,54 +8,193 @@
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
 
-    <h1>SentinelSOC Alerts</h1>
+    <!-- ===================================== -->
+    <!-- HEADER -->
+    <!-- ===================================== -->
+
+    <div class="header">
+
+        <h1>SentinelSOC Dashboard</h1>
+
+        <p class="subtitle">
+            Real-Time Security Monitoring &
+            AI-Powered Threat Intelligence
+        </p>
+
+        <p class="live-status">
+
+            ● LIVE MONITORING ACTIVE
+
+        </p>
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- STATISTICS -->
+    <!-- ===================================== -->
 
     <div class="stats-container">
 
         <div class="stat-card">
+
             <h2>{{ stats.total_alerts }}</h2>
+
             <p>Total Alerts</p>
+
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card critical-card">
+
             <h2>{{ stats.high_alerts }}</h2>
+
             <p>High Severity</p>
+
         </div>
 
         <div class="stat-card">
+
+            <h2>{{ stats.medium_alerts }}</h2>
+
+            <p>Medium Severity</p>
+
+        </div>
+
+        <div class="stat-card">
+
             <h2>{{ stats.unique_ips }}</h2>
+
             <p>Suspicious IPs</p>
+
         </div>
 
     </div>
+
+    <!-- ===================================== -->
+    <!-- FILTER BUTTONS -->
+    <!-- ===================================== -->
 
     <div class="filters">
 
-        <button onclick="filterAlerts('ALL')">All</button>
-        <button onclick="filterAlerts('HIGH')">High</button>
-        <button onclick="filterAlerts('MEDIUM')">Medium</button>
-        <button onclick="filterAlerts('LOW')">Low</button>
+        <button onclick="filterAlerts('ALL')">
+            All
+        </button>
+
+        <button onclick="filterAlerts('CRITICAL')">
+            Critical
+        </button>
+
+        <button onclick="filterAlerts('HIGH')">
+            High
+        </button>
+
+        <button onclick="filterAlerts('MEDIUM')">
+            Medium
+        </button>
+
+        <button onclick="filterAlerts('LOW')">
+            Low
+        </button>
 
     </div>
+
+    <!-- ===================================== -->
+    <!-- CHART -->
+    <!-- ===================================== -->
 
     <div class="chart-container">
+
         <canvas id="alertsChart"></canvas>
+
     </div>
 
-    <div class="leaderboard">
+    <!-- ===================================== -->
+    <!-- INCIDENT INTELLIGENCE -->
+    <!-- ===================================== -->
 
-        <h2>Suspicious IP Leaderboard</h2>
+    <div class="incident-section">
 
-        {% for ip, count in leaderboard %}
+        <h2>
+            Active Security Incidents
+        </h2>
 
-            <div class="leaderboard-item">
+        {% for incident in incidents %}
 
-                <p><strong>{{ ip }}</strong></p>
-                <p>{{ count }} alerts</p>
+            <div class="incident-card
+                {{ incident.severity.lower() }}">
+
+                <div class="incident-header">
+
+                    <h3>
+
+                        🚨 {{ incident.severity }}
+                        INCIDENT
+
+                    </h3>
+
+                    <span class="threat-score">
+
+                        Threat Score:
+                        {{ incident.score }}
+
+                    </span>
+
+                </div>
+
+                <p>
+
+                    <strong>IP Address:</strong>
+                    {{ incident.ip }}
+
+                </p>
+
+                <p>
+
+                    <strong>Total Events:</strong>
+                    {{ incident.event_count }}
+
+                </p>
+
+                <div class="attack-types">
+
+                    <strong>Attack Types:</strong>
+
+                    {% for attack in incident.attack_types %}
+
+                        <span class="attack-badge">
+
+                            {{ attack }}
+
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+                {% if incident.ai_summary %}
+
+                    <div class="ai-summary">
+
+                        <h4>
+
+                            AI SOC Analyst
+
+                        </h4>
+
+                        <p>
+
+                            {{ incident.ai_summary }}
+
+                        </p>
+
+                    </div>
+
+                {% endif %}
 
             </div>
 
@@ -63,40 +202,162 @@
 
     </div>
 
-    {% for alert in alerts %}
+    <!-- ===================================== -->
+    <!-- LEADERBOARD -->
+    <!-- ===================================== -->
 
-        <div class="alert {{ alert.severity.lower() }}"
-             data-severity="{{ alert.severity }}">
+    <div class="leaderboard">
 
-            <h3>{{ alert.type }}</h3>
+        <h2>
 
-            <p><strong>Severity:</strong> {{ alert.severity }}</p>
-            <p><strong>Time:</strong> {{ alert.timestamp }}</p>
-            <p><strong>IP Address:</strong> {{ alert.ip }}</p>
-            <p><strong>Reason:</strong> {{ alert.reason }}</p>
-            <p><strong>Log:</strong> {{ alert.log }}</p>
+            Suspicious IP Leaderboard
 
-        </div>
+        </h2>
 
-    {% endfor %}
+        {% for ip, count in leaderboard %}
 
-    <script id="chart-data" type="application/json">
+            <div class="leaderboard-item">
+
+                <p>
+
+                    <strong>{{ ip }}</strong>
+
+                </p>
+
+                <p>
+
+                    {{ count }} alerts
+
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- ALERT FEED -->
+    <!-- ===================================== -->
+
+    <div class="alerts-section">
+
+        <h2>
+
+            Live Alert Feed
+
+        </h2>
+
+        {% for alert in alerts %}
+
+            <div class="alert
+                 {{ alert.severity.lower() }}"
+
+                 data-severity="{{ alert.severity }}">
+
+                <div class="alert-header">
+
+                    <h3>
+
+                        {{ alert.type }}
+
+                    </h3>
+
+                    <span class="severity-badge">
+
+                        {{ alert.severity }}
+
+                    </span>
+
+                </div>
+
+                <p>
+
+                    <strong>Threat Score:</strong>
+                    {{ alert.score }}
+
+                </p>
+
+                <p>
+
+                    <strong>Time:</strong>
+                    {{ alert.timestamp }}
+
+                </p>
+
+                <p>
+
+                    <strong>IP Address:</strong>
+                    {{ alert.ip }}
+
+                </p>
+
+                <p>
+
+                    <strong>Reason:</strong>
+                    {{ alert.reason }}
+
+                </p>
+
+                <div class="attack-chain">
+
+                    <strong>Attack Chain:</strong>
+
+                    {% for attack in alert.attack_types %}
+
+                        <span class="attack-badge">
+
+                            {{ attack }}
+
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+                <p>
+
+                    <strong>Log:</strong>
+                    {{ alert.log }}
+
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- CHART DATA -->
+    <!-- ===================================== -->
+
+    <script id="chart-data"
+            type="application/json">
+
         {{ [
             stats.high_alerts,
             stats.medium_alerts,
             stats.low_alerts
         ] | tojson }}
+
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ===================================== -->
+    <!-- JAVASCRIPT -->
+    <!-- ===================================== -->
 
     <script>
 
         const chartData = JSON.parse(
-            document.getElementById("chart-data").textContent
+            document.getElementById(
+                "chart-data"
+            ).textContent
         );
 
-        const ctx = document.getElementById('alertsChart');
+        const ctx = document.getElementById(
+            'alertsChart'
+        );
 
         new Chart(ctx, {
 
@@ -104,11 +365,16 @@
 
             data: {
 
-                labels: ['High', 'Medium', 'Low'],
+                labels: [
+                    'High',
+                    'Medium',
+                    'Low'
+                ],
 
                 datasets: [{
 
-                    label: 'Alert Severity Counts',
+                    label:
+                    'Alert Severity Counts',
 
                     data: chartData,
 
@@ -119,10 +385,14 @@
 
             options: {
 
+                responsive: true,
+
                 scales: {
 
                     y: {
+
                         beginAtZero: true
+
                     }
 
                 }
@@ -131,30 +401,53 @@
 
         });
 
+        // =====================================
+        // FILTER ALERTS
+        // =====================================
+
         function filterAlerts(severity) {
 
-            const alerts = document.querySelectorAll('.alert');
+            const alerts =
+                document.querySelectorAll(
+                    '.alert'
+                );
 
             alerts.forEach(alert => {
 
                 if (
+
                     severity === 'ALL' ||
-                    alert.dataset.severity === severity
+
+                    alert.dataset.severity
+                    === severity
+
                 ) {
 
-                    alert.style.display = 'block';
+                    alert.style.display =
+                        'block';
 
-                } else {
+                }
 
-                    alert.style.display = 'none';
+                else {
+
+                    alert.style.display =
+                        'none';
+
                 }
 
             });
+
         }
 
+        // =====================================
+        // AUTO REFRESH
+        // =====================================
+
         setTimeout(function () {
+
             location.reload();
-        }, 5000);
+
+        }, 10000);
 
     </script>
 

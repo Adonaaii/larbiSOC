@@ -1,76 +1,445 @@
 body {
+
     background-color: #0f172a;
-    color: white;
+
+    color: #e2e8f0;
+
     font-family: Arial, sans-serif;
-    margin: 40px;
+
+    margin: 0;
+
+    padding: 30px;
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+.header {
+
+    margin-bottom: 40px;
 }
 
 h1 {
+
+    color: #38bdf8;
+
+    font-size: 42px;
+
+    margin-bottom: 10px;
+}
+
+.subtitle {
+
+    color: #94a3b8;
+
+    font-size: 18px;
+
+    margin-bottom: 10px;
+}
+
+.live-status {
+
+    color: #22c55e;
+
+    font-weight: bold;
+
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* =====================================
+   STATS
+===================================== */
+
+.stats-container {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 20px;
+
+    margin-bottom: 40px;
+}
+
+.stat-card {
+
+    background-color: #1e293b;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    width: 220px;
+
+    text-align: center;
+
+    border: 1px solid #334155;
+
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+
+    transform: translateY(-5px);
+}
+
+.stat-card h2 {
+
+    font-size: 36px;
+
+    margin-bottom: 10px;
+
+    color: #38bdf8;
+}
+
+.stat-card p {
+
+    color: #cbd5e1;
+
+    font-size: 16px;
+}
+
+.critical-card {
+
+    border: 1px solid #ef4444;
+}
+
+/* =====================================
+   FILTERS
+===================================== */
+
+.filters {
+
+    margin-bottom: 30px;
+}
+
+.filters button {
+
+    background-color: #1e293b;
+
+    color: white;
+
+    border: 1px solid #334155;
+
+    padding: 12px 18px;
+
+    margin-right: 10px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.filters button:hover {
+
+    background-color: #334155;
+
+    transform: scale(1.05);
+}
+
+/* =====================================
+   CHART
+===================================== */
+
+.chart-container {
+
+    background-color: #1e293b;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    margin-bottom: 40px;
+
+    border: 1px solid #334155;
+}
+
+/* =====================================
+   INCIDENT SECTION
+===================================== */
+
+.incident-section {
+
+    margin-bottom: 50px;
+}
+
+.incident-section h2 {
+
+    margin-bottom: 25px;
+
+    color: #38bdf8;
+}
+
+.incident-card {
+
+    background-color: #1e293b;
+
+    border-radius: 14px;
+
+    padding: 25px;
+
+    margin-bottom: 25px;
+
+    border: 1px solid #334155;
+
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.incident-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.threat-score {
+
+    background-color: #0f172a;
+
+    padding: 8px 14px;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+
+    border: 1px solid #334155;
+}
+
+/* =====================================
+   ALERT FEED
+===================================== */
+
+.alerts-section h2 {
+
+    margin-bottom: 25px;
+
     color: #38bdf8;
 }
 
 .alert {
+
     border: 1px solid #334155;
+
     background-color: #1e293b;
-    padding: 15px;
+
+    padding: 20px;
+
     margin-bottom: 20px;
-    border-radius: 10px;
+
+    border-radius: 12px;
+
+    transition: all 0.2s ease;
+}
+
+.alert:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.alert-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+}
+
+/* =====================================
+   SEVERITY COLORS
+===================================== */
+
+.critical {
+
+    border-left: 6px solid #ef4444;
 }
 
 .high {
-    border-left: 6px solid red;
+
+    border-left: 6px solid #f97316;
 }
 
 .medium {
-    border-left: 6px solid orange;
+
+    border-left: 6px solid #eab308;
 }
 
 .low {
-    border-left: 6px solid yellow;
+
+    border-left: 6px solid #22c55e;
 }
 
-.stats-container {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
-}
+.severity-badge {
 
-.stat-card {
-    background-color: #1e293b;
-    padding: 20px;
-    border-radius: 10px;
-    width: 200px;
-    text-align: center;
+    padding: 6px 12px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    background-color: #0f172a;
+
     border: 1px solid #334155;
 }
-.leaderboard {
-    background-color: #1e293b;
+
+/* =====================================
+   ATTACK BADGES
+===================================== */
+
+.attack-types,
+.attack-chain {
+
+    margin-top: 15px;
+
+    margin-bottom: 15px;
+}
+
+.attack-badge {
+
+    display: inline-block;
+
+    background-color: #334155;
+
+    color: #f8fafc;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    margin-right: 10px;
+
+    margin-top: 10px;
+
+    font-size: 13px;
+
+    border: 1px solid #475569;
+}
+
+/* =====================================
+   AI SUMMARY
+===================================== */
+
+.ai-summary {
+
+    margin-top: 25px;
+
+    background-color: #0f172a;
+
     padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 30px;
+
+    border-radius: 12px;
+
+    border: 1px solid #334155;
+}
+
+.ai-summary h4 {
+
+    color: #38bdf8;
+
+    margin-bottom: 15px;
+}
+
+.ai-summary p {
+
+    line-height: 1.7;
+
+    color: #cbd5e1;
+
+    white-space: pre-line;
+}
+
+/* =====================================
+   LEADERBOARD
+===================================== */
+
+.leaderboard {
+
+    background-color: #1e293b;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    margin-top: 50px;
+
+    margin-bottom: 50px;
+
+    border: 1px solid #334155;
+}
+
+.leaderboard h2 {
+
+    margin-bottom: 20px;
+
+    color: #38bdf8;
 }
 
 .leaderboard-item {
+
     display: flex;
+
     justify-content: space-between;
+
+    align-items: center;
+
     border-bottom: 1px solid #334155;
-    padding: 10px 0;
+
+    padding: 15px 0;
 }
 
-.filters {
-    margin-bottom: 20px;
-}
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
 
-.filters button {
-    background-color: #334155;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    margin-right: 10px;
-    border-radius: 6px;
-    cursor: pointer;
-}
+@media (max-width: 768px) {
 
-.filters button:hover {
-    background-color: #475569;
+    .stats-container {
+
+        flex-direction: column;
+    }
+
+    .stat-card {
+
+        width: 100%;
+    }
+
+    .incident-header,
+    .alert-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
 }
