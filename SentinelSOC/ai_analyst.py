@@ -5,9 +5,12 @@ load_dotenv()
 import os
 
 api_key = os.getenv("GROQ_API_KEY")
-client = Groq(api_key=api_key)
+client = Groq(api_key=api_key) if api_key else None
 
 def generate_ai_summary(incident):
+    if client is None:
+        return ""
+
 
     prompt = f"""
     You are a SOC analyst.
